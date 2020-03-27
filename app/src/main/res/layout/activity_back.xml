@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@android:color/holo_blue_light">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_text_insert"
+        android:padding="8dp"
+        android:hint="Descrição da tarefa"
+        android:textColorHint="@android:color/holo_blue_light"
+        android:fontFamily="@font/roboto_light"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"
+        android:maxLength="30"
+        android:inputType="none"
+        android:focusable="false"
+        android:clickable="true"
+        android:background="@drawable/rounded_edittext"
+        />
+
+</LinearLayout>
