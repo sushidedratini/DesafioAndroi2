@@ -20,6 +20,7 @@ public class ToolbarIconClick implements View.OnClickListener {
     private Interpolator interpolator;
     private int anim_duration;
     private boolean dropped=false;
+    private boolean edittextclick=false;
     private AnimatorSet animatorSet=new AnimatorSet();
     private AppCompatImageButton toolbaricon;
 

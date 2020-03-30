@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="sneek_height">614dp</dimen>
+    <dimen name="sneek_height">600dp</dimen>
 </resources>

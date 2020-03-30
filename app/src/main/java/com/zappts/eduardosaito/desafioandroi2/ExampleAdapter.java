@@ -3,8 +3,10 @@ package com.zappts.eduardosaito.desafioandroi2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleViewHolder> {
 
     public ArrayList<ExampleItem> mExampleList;
+
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {
@@ -27,14 +30,18 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     public static class ExampleViewHolder extends  RecyclerView.ViewHolder {
 
         public TextView mTextView1;
-        public TextView mTextView2;
-        public Button mButtonRemoveRow;
+        public ImageButton mEditButton;
 
         public ExampleViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super( itemView );
             mTextView1 = itemView.findViewById( R.id.title);
-            mTextView2 = itemView.findViewById( R.id.subtitle );
-            mButtonRemoveRow = itemView.findViewById( R.id.remove_row );
+            mEditButton = itemView.findViewById( R.id.edit_btn );
+            mEditButton.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText( v.getContext(), "Deu certo!", Toast.LENGTH_SHORT ).show();
+                }
+            } );
 
             itemView.setOnClickListener(new View.OnClickListener() {
                @Override
@@ -66,15 +73,20 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     public void onBindViewHolder(@NonNull ExampleViewHolder holder, final int position) {
         ExampleItem currentItem = mExampleList.get(position);
         holder.mTextView1.setText( currentItem.getmText1() );
-        holder.mTextView2.setText( currentItem.getmText2() );
 
-        holder.mButtonRemoveRow.setOnClickListener( new View.OnClickListener() {
-            public void onClick(View v) {
-                mExampleList.remove(position);
-                notifyItemRemoved( position );
-                notifyItemRangeChanged(position, mExampleList.size());
-            }
-        });
+        //holder.mTextView2.setText( currentItem.getmText2() );
+
+//        holder.mButtonRemoveRow.setOnClickListener( new View.OnClickListener() {
+//            public void onClick(View v) {
+//
+//                Intent intent = new Intent(v.getContext(), FrontActivity.class);
+//                intent.putExtra( "position", position );
+//                v.getContext().startActivity( intent );
+////                mExampleList.remove(position);
+//                notifyItemRemoved( position );
+//                notifyItemRangeChanged(position, mExampleList.size());
+//            }
+//        });
 
     }
 

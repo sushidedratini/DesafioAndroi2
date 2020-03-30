@@ -11,6 +11,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import com.evolve.backdroplibrary.BackdropActions;
@@ -26,6 +27,7 @@ public class BackdropContainer extends FrameLayout implements BackdropActions {
     private ToolbarIconClick toolbarIconClick;
     private Drawable mMenuicon;
     private Drawable mCloseicon;
+    private Drawable mDoneicon;
     private int height;
 
 
@@ -38,7 +40,7 @@ public class BackdropContainer extends FrameLayout implements BackdropActions {
 
         TypedArray typedArray=context.obtainStyledAttributes(attrs,R.styleable.BackdropContainer,0,0);
 
-        mMenuicon=typedArray.getDrawable(R.styleable.BackdropContainer_menuIcon);
+        mMenuicon=typedArray.getDrawable(R.styleable.BackdropContainer_closeIcon);
         mCloseicon=typedArray.getDrawable(R.styleable.BackdropContainer_closeIcon);
         duration=typedArray.getInt(R.styleable.BackdropContainer_duration,1000);
 
@@ -79,6 +81,7 @@ public class BackdropContainer extends FrameLayout implements BackdropActions {
         }
     }
 
+
     private int getFrontViewMargin() {
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) getFrontview().getLayoutParams();
         int frontViewtopMargin = layoutParams.topMargin;
@@ -108,6 +111,7 @@ public class BackdropContainer extends FrameLayout implements BackdropActions {
 
     @Override
     public void showBackview() {
+        EditText e = findViewById( R.id.edit_text_insert );
         toolbarIconClick.open();
     }
 

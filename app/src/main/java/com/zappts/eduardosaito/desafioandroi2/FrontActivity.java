@@ -1,18 +1,15 @@
 package com.zappts.eduardosaito.desafioandroi2;
 
-import android.app.ActionBar;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import android.view.Gravity;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
-import android.widget.Button;
 import android.widget.EditText;
-
 import com.evolve.backdroplibrary.BackdropContainer;
-
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,16 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class FrontActivity extends AppCompatActivity {
 
-    private ArrayList<ExampleItem> mExampleList;
+    private ArrayList<ExampleItem> itemList;
 
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private Button buttonInsert;
-    private Button buttonRemove;
     private EditText editTextInsert;
-    private EditText editTextRemove;
 
     private Toolbar toolbar;
     private BackdropContainer backdropContainer;
@@ -39,26 +33,27 @@ public class FrontActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.backdrop_main);
 
-        createExampleList();
+        loadSavedData();
         buildRecyclerView();
 
-        //buttonInsert = findViewById( R.id.button_insert );
-//        buttonInsert.setOnClickListener( new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                insertItem();
-//            }
-//        });
         toolbar = findViewById(R.id.testToolbar);
         backdropContainer = findViewById(R.id.backdropcontainer);
         editTextInsert = findViewById( R.id.edit_text_insert );
         editTextInsert.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                changeEditText( "Criando uma nova tarefa!" );
                 insertItem();
             }
         });
 
+
+
+//      Edit text can be clickable, but not editable... at first
+        editTextInsert.setFocusable( false );
+        editTextInsert.setClickable( true );
+
+//      Taken from dimen file, that sets the max height which the backdrop can go (downwards)
         int height = this.getResources().getDimensionPixelSize( R.dimen.sneek_height );
         backdropContainer.attachToolbar(toolbar)
                 .dropInterpolator(new LinearInterpolator())
@@ -67,40 +62,57 @@ public class FrontActivity extends AppCompatActivity {
 
     }
 
+    public void buildRecyclerView() {
+        mRecyclerView = findViewById( R.id.recyclerView );
+        mRecyclerView.setHasFixedSize( true );
+        mLayoutManager = new LinearLayoutManager( this );
+        mAdapter = new ExampleAdapter( itemList );
+
+        mRecyclerView.setLayoutManager( mLayoutManager );
+        mRecyclerView.setAdapter( mAdapter );
+
+    }
+
     public void insertItem() {
-        mExampleList.add(mExampleList.size(), new ExampleItem( "Line" + mExampleList.size(), "Line2"));
-        mAdapter.notifyItemInserted(mExampleList.size());
-        System.out.println( "Inseriu!" );
+        itemList.add(itemList.size(), new ExampleItem( "Line" + itemList.size(), "Line2"));
+        mAdapter.notifyItemInserted(itemList.size());
+        saveData();
     }
 
-    public void changeItem(int position, String text) {
-        mExampleList.get( position ).changeText1( text );
-        mAdapter.notifyItemChanged( position );
+    public void removeItem(ArrayList<ExampleItem> items, int position) {
+
     }
 
-    public void createExampleList() {
-        mExampleList = new ArrayList<>();
+    //  Function that changes the text when clicked on RV
+    public void changeEditText(String text) {
+        editTextInsert.setText( text );
+    }
+
+    public void saveData() {
+        SharedPreferences sharedPreferences = getSharedPreferences( "shared preferences", MODE_PRIVATE );
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson( itemList );
+        editor.putString( "task list", json );
+        editor.apply();
+    }
+
+    public void loadSavedData() {
+        SharedPreferences sharedPreferences = getSharedPreferences( "shared preferences", MODE_PRIVATE );
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString( "task list", null );
+        Type type = new TypeToken<ArrayList<ExampleItem>>() {}.getType();
+        itemList = gson.fromJson(json, type);
+
+        if (itemList == null) {
+            itemList = new ArrayList<>();
+        }
+
+//        itemList = new ArrayList<>();
 //        mExampleList.add(new ExampleItem( "Line1", "Line2" ));
 //        mExampleList.add(new ExampleItem( "Line3", "Line4" ));
 //        mExampleList.add(new ExampleItem( "Line5", "Line6" ));
     }
 
-    public void buildRecyclerView() {
-        mRecyclerView = findViewById( R.id.recyclerView );
-        mRecyclerView.setHasFixedSize( true );
-        mLayoutManager = new LinearLayoutManager( this );
-        mAdapter = new ExampleAdapter( mExampleList );
-
-        mRecyclerView.setLayoutManager( mLayoutManager );
-        mRecyclerView.setAdapter( mAdapter );
-
-        mAdapter.setOnItemClickListener( new ExampleAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                changeItem( position, "Clicked" );
-            }
-        } );
-
-    }
 
 }

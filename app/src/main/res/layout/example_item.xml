@@ -4,54 +4,54 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    app:cardCornerRadius="4dp"
-    android:background="@drawable/rounded_textview">
+    android:orientation="vertical"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp">
+        android:background="@android:color/white"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/title"
+        <View
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent" />
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="Line1"
-            android:fontFamily="@font/roboto"
-            android:textColor="@android:color/black"
-            android:textSize="20sp" />
+            android:padding="16dp">
 
-        <TextView
-            android:id="@+id/subtitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/title"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:text="Line2"
-            android:fontFamily="@font/roboto"
-            android:textSize="15sp" />
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:fontFamily="@font/roboto"
+                android:text="Line1"
+                android:textColor="@android:color/black"
+                android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/remove_row"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:text="x"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="16dp"
-            android:background="@drawable/btn_rounded_delete" />
+            <ImageButton
+                android:id="@+id/edit_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/title"
+                android:layout_alignRight="@+id/title"
+                android:layout_alignBottom="@+id/title"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_edit_24px"
+                android:background="#0000"/>
 
+        </RelativeLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

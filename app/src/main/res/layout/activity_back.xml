@@ -2,8 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:padding="16dp"
-    android:background="@android:color/holo_blue_light">
+    android:background="@android:color/holo_blue_light"
+    tools:context=".FrontActivity">
 
     <EditText
         android:layout_width="match_parent"
@@ -15,10 +17,6 @@
         android:fontFamily="@font/roboto_light"
         android:textSize="20sp"
         android:textColor="@android:color/white"
-        android:maxLength="30"
-        android:inputType="none"
-        android:focusable="false"
-        android:clickable="true"
         android:background="@drawable/rounded_edittext"
         />
 
