@@ -2,31 +2,31 @@ package com.zappts.eduardosaito.desafioandroi2;
 
 public class ExampleItem {
 
-    private String mText1;
-    private String mText2;
+    private String mText;
+    private int mPriority;
 
-    public ExampleItem(String text1, String text2) {
-        mText1 = text1;
-        mText2 = text2;
+    public ExampleItem(String text, int priority) {
+        mText = text;
+        mPriority = priority;
     }
 
-    public void changeText1(String text) {
-        mText1 = text;
+    public void changemText(String text) {
+        mText = text;
     }
 
-    public String getmText1() {
-        return mText1;
+    public String getmText() {
+        return mText;
     }
 
-    public void setmText1(String mText1) {
-        this.mText1 = mText1;
+    public void setmText(String mText) {
+        this.mText = mText;
     }
 
-    public String getmText2() {
-        return mText2;
+    public int getmPriority() {
+        return mPriority;
     }
 
-    public void setmText2(String mText2) {
-        this.mText2 = mText2;
+    public void setmPriority(int mPriority) {
+        this.mPriority = mPriority;
     }
 }

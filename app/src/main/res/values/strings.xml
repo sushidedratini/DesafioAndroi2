@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">DesafioAndroi2</string>
+    <string name="app_logo">App Logo</string>
+    <string name="to_do">TO-DO</string>
+    <string name="delete_item">Delete Item</string>
+    <string name="task_desc">Descrição da tarefa</string>
+
+    <string-array name="priorities">
+        <item>Concluído</item>
+        <item>Fazendo</item>
+        <item>À Fazer</item>
+        <item>Outros</item>
+    </string-array>
+
 </resources>

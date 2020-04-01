@@ -5,19 +5,76 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:padding="16dp"
     android:background="@android:color/holo_blue_light"
+    android:orientation="vertical"
     tools:context=".FrontActivity">
 
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_text_insert"
-        android:padding="8dp"
-        android:hint="Descrição da tarefa"
-        android:textColorHint="@android:color/holo_blue_light"
-        android:fontFamily="@font/roboto_light"
-        android:textSize="20sp"
-        android:textColor="@android:color/white"
-        android:background="@drawable/rounded_edittext"
-        />
+        android:id="@+id/criar_tarefa_layout"
+        android:orientation="horizontal">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_text_insert"
+            android:padding="8dp"
+            android:hint="@string/task_desc"
+            android:textColorHint="@android:color/holo_blue_light"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_edittext"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editar_tarefa_layout"
+        android:orientation="vertical">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editar_tarefa"
+            android:padding="8dp"
+            android:hint="@string/task_desc"
+            android:textColorHint="@android:color/holo_blue_light"
+            android:fontFamily="@font/roboto_light"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_edittext"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:id="@+id/view_color"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/solid_circle" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/options_spin"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="4dp"
+                android:padding="8dp"
+                android:spinnerMode="dropdown"
+                android:popupBackground="@android:color/holo_blue_dark"
+                android:background="@drawable/rounded_spinner"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
 
 </LinearLayout>

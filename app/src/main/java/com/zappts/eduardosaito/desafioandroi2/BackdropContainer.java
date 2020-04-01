@@ -7,12 +7,14 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.evolve.backdroplibrary.BackdropActions;
 
@@ -27,9 +29,8 @@ public class BackdropContainer extends FrameLayout implements BackdropActions {
     private ToolbarIconClick toolbarIconClick;
     private Drawable mMenuicon;
     private Drawable mCloseicon;
-    private Drawable mDoneicon;
     private int height;
-
+    private static final String TAG = "BackdropContainer";
 
     Interpolator interpolator;
     int duration;
@@ -37,10 +38,9 @@ public class BackdropContainer extends FrameLayout implements BackdropActions {
         super(context, attrs);
 
         this.context=context;
+        TypedArray typedArray=context.obtainStyledAttributes(attrs, R.styleable.BackdropContainer,0,0);
 
-        TypedArray typedArray=context.obtainStyledAttributes(attrs,R.styleable.BackdropContainer,0,0);
-
-        mMenuicon=typedArray.getDrawable(R.styleable.BackdropContainer_closeIcon);
+        mMenuicon=typedArray.getDrawable(R.styleable.BackdropContainer_menuIcon);
         mCloseicon=typedArray.getDrawable(R.styleable.BackdropContainer_closeIcon);
         duration=typedArray.getInt(R.styleable.BackdropContainer_duration,1000);
 
@@ -49,11 +49,9 @@ public class BackdropContainer extends FrameLayout implements BackdropActions {
         DisplayMetrics metrics=new DisplayMetrics();
         ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
         height=metrics.heightPixels;
-
     }
 
     public BackdropContainer attachToolbar(Toolbar toolbar){
-
         this.toolbar=toolbar;
         this.toolbar.setNavigationIcon(mMenuicon);
         return  this;
@@ -70,9 +68,7 @@ public class BackdropContainer extends FrameLayout implements BackdropActions {
     }
 
     public void build(){
-
         if (checkTotalview()){
-
             toolbarIconClick =new ToolbarIconClick(context,getChildAt(1),getBackview(),mMenuicon,
                     mCloseicon,height,interpolator,duration);
             toolbar.setNavigationOnClickListener(toolbarIconClick);
@@ -80,7 +76,6 @@ public class BackdropContainer extends FrameLayout implements BackdropActions {
             throw new ArrayIndexOutOfBoundsException("Backdrop should contain only two child");
         }
     }
-
 
     private int getFrontViewMargin() {
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) getFrontview().getLayoutParams();

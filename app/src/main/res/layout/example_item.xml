@@ -18,7 +18,8 @@
         <View
             android:layout_width="10dp"
             android:layout_height="match_parent"
-            android:background="@color/colorAccent" />
+            android:id="@+id/priority_color"
+            android:background="@android:color/white" />
 
         <RelativeLayout
             android:layout_width="match_parent"
