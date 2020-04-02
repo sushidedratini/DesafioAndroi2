@@ -75,9 +75,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/backdropcontainer"
+        app:duration="300"
+        app:doneIcon="@drawable/ic_done_24px"
         app:menuIcon="@drawable/ic_add_24px"
-        app:closeIcon="@drawable/ic_clear_24px"
-        app:duration="300">
+        app:closeIcon="@drawable/ic_clear_24px">
+
+<!--        app:menuIcon="@drawable/ic_add_24px"-->
+<!--        app:closeIcon="@drawable/ic_clear_24px"-->
 
         <include layout="@layout/activity_back"/>
         <include layout="@layout/activity_front"/>

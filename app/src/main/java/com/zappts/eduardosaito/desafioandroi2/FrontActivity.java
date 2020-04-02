@@ -1,6 +1,11 @@
 package com.zappts.eduardosaito.desafioandroi2;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -13,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.evolve.backdroplibrary.BackdropContainer;
@@ -21,14 +27,17 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class FrontActivity extends AppCompatActivity implements ExampleAdapter.OnEditCListener, AdapterView.OnItemSelectedListener {
+public class FrontActivity extends AppCompatActivity implements ExampleAdapter.OnEditCListener, AdapterView.OnItemSelectedListener, ExampleAdapter.OnAlarmCListener, TimePickerDialog.OnTimeSetListener {
 
     private static final String TAG = "FrontActivity";
     public static int backdropHeight;
@@ -45,10 +54,11 @@ public class FrontActivity extends AppCompatActivity implements ExampleAdapter.O
     private ImageButton save_btn;
     private Toolbar toolbar;
     private BackdropContainer backdropContainer;
-    private String[] priorities = {"Concluído", "Fazendo", "À fazer", "Incompleta"};
+    private String[] priorities = {"Concluída", "Fazendo", "À Fazer", "Incompleta"};
     private View viewColor;
     private int pos;
     private Spinner mSpinner;
+    private NotificationHelper mNotificationHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +94,7 @@ public class FrontActivity extends AppCompatActivity implements ExampleAdapter.O
                     clickedEdit = false;
                     makeLayoutVisible();
                 }
+                delete_btn.setVisibility( View.GONE );
                 save_btn.setVisibility( View.GONE );
             }
         } );
@@ -107,16 +118,18 @@ public class FrontActivity extends AppCompatActivity implements ExampleAdapter.O
         mSpinner.setAdapter(adapter);
         mSpinner.setOnItemSelectedListener( this );
 
+        // Notification and Alarm
+        mNotificationHelper = new NotificationHelper(this);
+
         makeLayoutVisible();
         buildBackdrop();
-
     }
 
     public void buildRecyclerView() {
         mRecyclerView = findViewById( R.id.recyclerView );
         mRecyclerView.setHasFixedSize( true );
         mLayoutManager = new LinearLayoutManager( this );
-        mAdapter = new ExampleAdapter( itemList, this );
+        mAdapter = new ExampleAdapter( itemList, this , this);
         mRecyclerView.setLayoutManager( mLayoutManager );
         mRecyclerView.setAdapter( mAdapter );
     }
@@ -130,57 +143,10 @@ public class FrontActivity extends AppCompatActivity implements ExampleAdapter.O
                 .build();
     }
 
-//    public void buildSpinner(int position) {
-//        Spinner drop = findViewById( R.id.options_spin );
-//        ArrayAdapter<String> spin_adapter = new ArrayAdapter<>( getBaseContext(), R.layout.spinner_item, priorities );
-//        drop.setAdapter( spin_adapter );
-//        drop.setSelection( itemList.get( position ).getmPriority() );
-//
-//        switch(position) {
-//            case 0:
-//                viewColor.getBackground().setColorFilter( Color.parseColor( "#33e563" ), PorterDuff.Mode.SRC_ATOP );
-//                break;
-//            case 1:
-//                viewColor.getBackground().setColorFilter( Color.parseColor( "#e56333" ), PorterDuff.Mode.SRC_ATOP );
-//                break;
-//            case 2:
-//                viewColor.getBackground().setColorFilter( Color.parseColor( "#335ce5" ), PorterDuff.Mode.SRC_ATOP );
-//                break;
-//            case 3:
-//                viewColor.getBackground().setColorFilter( Color.parseColor( "#e5335c" ), PorterDuff.Mode.SRC_ATOP );
-//                break;
-//        }
-
-//        drop.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                TextView tv = findViewById( R.id.custom_spin_item );
-//                String selectedItem = parent.getItemAtPosition(position).toString();
-//                if (selectedItem.equals( "Concluído" )) {
-//                    tv.setText( "Concluído" );
-//                    viewColor.getBackground().setColorFilter( Color.parseColor( "#33e563" ), PorterDuff.Mode.SRC_ATOP );
-//                } else if (selectedItem.equals( "Fazendo" )) {
-//                    tv.setText( "Fazendo" );
-//                    viewColor.getBackground().setColorFilter( Color.parseColor( "#e56333" ), PorterDuff.Mode.SRC_ATOP );
-//                } else if (selectedItem.equals( "À fazer" )) {
-//                    tv.setText( "À Fazer" );
-//                    viewColor.getBackground().setColorFilter( Color.parseColor( "#335ce5" ), PorterDuff.Mode.SRC_ATOP );
-//                } else if (selectedItem.equals( "Outros" )) {
-//                    tv.setText( "Outros" );
-//                    viewColor.getBackground().setColorFilter( Color.parseColor( "#e5335c" ), PorterDuff.Mode.SRC_ATOP );
-//                }
-//            }
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        } );
-
-//    }
-
     public void insertItem() {
-        itemList.add(itemList.size(), new ExampleItem( "Criando uma nova tarefa!", 3));
+        itemList.add(itemList.size(), new ExampleItem( "Criando uma nova tarefa!", 2, false));
         mAdapter.notifyItemInserted(itemList.size());
+        sendOnChannel( "TO-DO: Nova Tarefa criada!", "Não se esqueça de realizá-la!" );
         saveData();
     }
 
@@ -314,7 +280,6 @@ public class FrontActivity extends AppCompatActivity implements ExampleAdapter.O
         clickedEdit = true;
         // Retrieve data from RecyclerView here!
         pos = position;
-        //Log.d( TAG, "onEditClick: Chegouaqui!" );
         delete_btn.setVisibility( View.VISIBLE );
         save_btn.setVisibility( View.VISIBLE );
         makeLayoutVisible();
@@ -322,17 +287,55 @@ public class FrontActivity extends AppCompatActivity implements ExampleAdapter.O
     }
 
     @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        Calendar c = Calendar.getInstance();
+        c.set( Calendar.HOUR_OF_DAY, hourOfDay );
+        c.set( Calendar.MINUTE, minute );
+        c.set(Calendar.SECOND, 0);
+
+        startAlarm(c);
+    }
+
+    @Override
+    public void onAlarmClick(int position) {
+        if (itemList.get( position ).ismAlarmSet()) {
+            cancelAlarm();
+        } else {
+            DialogFragment timePicker = new TimerPickFragment();
+            timePicker.show( getSupportFragmentManager(), "time fragment" );
+        }
+    }
+
+    public void startAlarm(Calendar c) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService( Context.ALARM_SERVICE );
+        Intent intent = new Intent( this, AlertReceiver.class );
+        PendingIntent pendingIntent = PendingIntent.getBroadcast( this, 1, intent, 0 );
+
+        alarmManager.setExact( AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent );
+    }
+
+    private void cancelAlarm() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService( Context.ALARM_SERVICE );
+        Intent intent = new Intent( this, AlertReceiver.class );
+        PendingIntent pendingIntent = PendingIntent.getBroadcast( this, 1, intent, 0 );
+
+        alarmManager.cancel(pendingIntent);
+    }
+
+    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String selectedItem = parent.getItemAtPosition( position ).toString();
-        Toast.makeText( parent.getContext(), selectedItem, Toast.LENGTH_SHORT ).show();
-        if (selectedItem.equals( "Concluído" )) {
-            viewColor.getBackground().setColorFilter( Color.parseColor( "#33e563" ), PorterDuff.Mode.SRC_ATOP );
-        } else if (selectedItem.equals( "Fazendo" )) {
-            viewColor.getBackground().setColorFilter( Color.parseColor( "#f9e843" ), PorterDuff.Mode.SRC_ATOP );
-        } else if (selectedItem.equals( "À Fazer" )) {
-            viewColor.getBackground().setColorFilter( Color.parseColor( "#335ce5" ), PorterDuff.Mode.SRC_ATOP );
-        } else if (selectedItem.equals( "Incompleta" )) {
-            viewColor.getBackground().setColorFilter( Color.parseColor( "#e5335c" ), PorterDuff.Mode.SRC_ATOP );
+        //Toast.makeText( getApplicationContext(), selectedItem, Toast.LENGTH_SHORT ).show();
+        if (!selectedItem.equals( itemList.get( pos ).toString() )) {
+            if (selectedItem.equals( "Concluída" )) {
+                viewColor.getBackground().setColorFilter( Color.parseColor( "#33e563" ), PorterDuff.Mode.SRC_ATOP );
+            } else if (selectedItem.equals( "Fazendo" )) {
+                viewColor.getBackground().setColorFilter( Color.parseColor( "#f9e843" ), PorterDuff.Mode.SRC_ATOP );
+            } else if (selectedItem.equals( "À Fazer" )) {
+                viewColor.getBackground().setColorFilter( Color.parseColor( "#335ce5" ), PorterDuff.Mode.SRC_ATOP );
+            } else if (selectedItem.equals( "Incompleta" )) {
+                viewColor.getBackground().setColorFilter( Color.parseColor( "#e5335c" ), PorterDuff.Mode.SRC_ATOP );
+            }
         }
     }
 
@@ -340,4 +343,12 @@ public class FrontActivity extends AppCompatActivity implements ExampleAdapter.O
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+    public void sendOnChannel(String title, String message) {
+        NotificationCompat.Builder nb = mNotificationHelper.getChannelNotification( title, message );
+        mNotificationHelper.getManager().notify( 1, nb.build() );
+    }
+
+
+
 }

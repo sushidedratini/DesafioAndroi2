@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="sneek_height">540dp</dimen>
+    <dimen name="sneek_height">560dp</dimen>
     <dimen name="sneek_heigh_edit">-40dp</dimen>
-<!--  Default is 600dp  -->
+    <!--  Default is 600dp  -->
+    <!--  Best Height for Edit 540dp -->
 </resources>

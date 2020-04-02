@@ -4,10 +4,12 @@ public class ExampleItem {
 
     private String mText;
     private int mPriority;
+    private boolean mAlarmSet;
 
-    public ExampleItem(String text, int priority) {
+    public ExampleItem(String text, int priority, boolean alarmSet) {
         mText = text;
         mPriority = priority;
+        mAlarmSet = alarmSet;
     }
 
     public void changemText(String text) {
@@ -28,5 +30,13 @@ public class ExampleItem {
 
     public void setmPriority(int mPriority) {
         this.mPriority = mPriority;
+    }
+
+    public boolean ismAlarmSet() {
+        return mAlarmSet;
+    }
+
+    public void setmAlarmSet(boolean mAlarmSet) {
+        this.mAlarmSet = mAlarmSet;
     }
 }

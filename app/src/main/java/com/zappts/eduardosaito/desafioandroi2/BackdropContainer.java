@@ -12,9 +12,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.evolve.backdroplibrary.BackdropActions;
 
@@ -22,15 +20,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
-public class BackdropContainer extends FrameLayout implements BackdropActions {
+public class BackdropContainer extends FrameLayout implements BackdropActions, ExampleAdapter.OnEditCListener {
 
     private Context context;
     private Toolbar toolbar;
     private ToolbarIconClick toolbarIconClick;
     private Drawable mMenuicon;
     private Drawable mCloseicon;
+    private Drawable mDoneicon;
     private int height;
     private static final String TAG = "BackdropContainer";
+    private boolean clickedEdit = false;
 
     Interpolator interpolator;
     int duration;
@@ -42,6 +42,7 @@ public class BackdropContainer extends FrameLayout implements BackdropActions {
 
         mMenuicon=typedArray.getDrawable(R.styleable.BackdropContainer_menuIcon);
         mCloseicon=typedArray.getDrawable(R.styleable.BackdropContainer_closeIcon);
+        mDoneicon=typedArray.getDrawable( R.styleable.BackdropContainer_doneIcon );
         duration=typedArray.getInt(R.styleable.BackdropContainer_duration,1000);
 
         typedArray.recycle();
@@ -69,8 +70,8 @@ public class BackdropContainer extends FrameLayout implements BackdropActions {
 
     public void build(){
         if (checkTotalview()){
-            toolbarIconClick =new ToolbarIconClick(context,getChildAt(1),getBackview(),mMenuicon,
-                    mCloseicon,height,interpolator,duration);
+            toolbarIconClick =new ToolbarIconClick(context, getFrontview(), getBackview(), mMenuicon,
+                    mCloseicon, mDoneicon, height, interpolator, duration);
             toolbar.setNavigationOnClickListener(toolbarIconClick);
         }else {
             throw new ArrayIndexOutOfBoundsException("Backdrop should contain only two child");
@@ -103,7 +104,6 @@ public class BackdropContainer extends FrameLayout implements BackdropActions {
         return (int) topMArginPixels;
     }
 
-
     @Override
     public void showBackview() {
         toolbarIconClick.open();
@@ -112,5 +112,11 @@ public class BackdropContainer extends FrameLayout implements BackdropActions {
     @Override
     public void closeBackview() {
         toolbarIconClick.close();
+    }
+
+    @Override
+    public void onEditClick(int position) {
+        clickedEdit = true;
+        //teste
     }
 }

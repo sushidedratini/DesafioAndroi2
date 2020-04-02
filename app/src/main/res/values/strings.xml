@@ -4,12 +4,14 @@
     <string name="to_do">TO-DO</string>
     <string name="delete_item">Delete Item</string>
     <string name="task_desc">Descrição da tarefa</string>
+    <string name="edit">Edit Button</string>
+    <string name="alarm_button">Alarm Button</string>
 
     <string-array name="priorities">
-        <item>Concluído</item>
+        <item>Concluída</item>
         <item>Fazendo</item>
         <item>À Fazer</item>
-        <item>Outros</item>
+        <item>Incompleta</item>
     </string-array>
 
 </resources>
