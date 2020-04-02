@@ -45,7 +45,7 @@ public class FrontActivity extends AppCompatActivity implements ExampleAdapter.O
     private ImageButton save_btn;
     private Toolbar toolbar;
     private BackdropContainer backdropContainer;
-    private String[] priorities = {"Concluído", "Fazendo", "À fazer", "Outros"};
+    private String[] priorities = {"Concluído", "Fazendo", "À fazer", "Incompleta"};
     private View viewColor;
     private int pos;
     private Spinner mSpinner;
@@ -320,7 +320,7 @@ public class FrontActivity extends AppCompatActivity implements ExampleAdapter.O
             viewColor.getBackground().setColorFilter( Color.parseColor( "#f9e843" ), PorterDuff.Mode.SRC_ATOP );
         } else if (selectedItem.equals( "À Fazer" )) {
             viewColor.getBackground().setColorFilter( Color.parseColor( "#335ce5" ), PorterDuff.Mode.SRC_ATOP );
-        } else if (selectedItem.equals( "Outros" )) {
+        } else if (selectedItem.equals( "Incompleta" )) {
             viewColor.getBackground().setColorFilter( Color.parseColor( "#e5335c" ), PorterDuff.Mode.SRC_ATOP );
         }
     }
