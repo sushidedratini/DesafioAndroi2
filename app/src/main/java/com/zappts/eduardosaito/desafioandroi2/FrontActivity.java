@@ -223,6 +223,18 @@ public class FrontActivity extends AppCompatActivity implements ExampleAdapter.O
     }
 
     public void updateData(int position) {
+        int spin_sel = mSpinner.getSelectedItemPosition();
+
+        if (spin_sel == 1) {
+            for (int i = 0; i < itemList.size(); i++) {
+                if (i != position) {
+                    if (itemList.get( i ).getmPriority() == spin_sel) {
+                        itemList.get( i ).setmPriority( 3 );
+                    }
+                }
+            }
+        }
+
         itemList.get( position ).setmText( editTodo.getText().toString() );
         itemList.get( position ).setmPriority( mSpinner.getSelectedItemPosition() );
         mAdapter.notifyDataSetChanged();
@@ -273,7 +285,7 @@ public class FrontActivity extends AppCompatActivity implements ExampleAdapter.O
     public void makeLayoutVisible() {
         LinearLayout ly_create = findViewById( R.id.criar_tarefa_layout );
         LinearLayout ly_edit = findViewById( R.id.editar_tarefa_layout );
-        if (clickedEdit == false) {
+        if (!clickedEdit) {
             ly_create.setVisibility( View.VISIBLE );
             ly_edit.setVisibility( View.GONE );
         } else {
@@ -307,7 +319,6 @@ public class FrontActivity extends AppCompatActivity implements ExampleAdapter.O
         save_btn.setVisibility( View.VISIBLE );
         makeLayoutVisible();
         editDataLoad( itemList, position );
-        //buildBackdrop();
     }
 
     @Override

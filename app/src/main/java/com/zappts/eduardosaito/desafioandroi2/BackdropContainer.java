@@ -106,7 +106,6 @@ public class BackdropContainer extends FrameLayout implements BackdropActions {
 
     @Override
     public void showBackview() {
-        EditText e = findViewById( R.id.edit_text_insert );
         toolbarIconClick.open();
     }
 
